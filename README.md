@@ -36,12 +36,16 @@ data/raw/complaints.csv ─> scripts/prepare_data.py ─> data/complaints_clean.
 
 ## Dataset
 
+## Dataset
+
 The category model is trained on the **CFPB Consumer Complaint Database**
-(US government, public domain; also available on Kaggle). Only complaints that include
-a consumer narrative are used. The CFPB `Product` field is mapped to 7 categories:
-Credit Reporting, Debt Collection, Mortgage, Credit & Prepaid Cards,
-Bank Accounts & Services, Loans, Money Transfers. Redaction tokens (`XXXX`, masked
-dates and amounts) are stripped.
+(US government, public domain). The copy used here was downloaded from Kaggle:
+"Consumer Complaint Database" by Kaushik D (CC0: Public Domain), which republishes
+the CFPB data. Only complaints that include a consumer narrative are used. The CFPB
+`Product` field is mapped to 7 categories: Credit Reporting, Debt Collection, Mortgage,
+Credit & Prepaid Cards, Bank Accounts & Services, Loans, Money Transfers. Redaction
+tokens (`XXXX`, masked dates and amounts) are stripped. From the full file, 4,000
+complaints per category were sampled (28,000 in total), with 20% held out for testing.s
 
 `data/sample_complaints.csv` is a tiny **synthetic** file used only so the app and tests run
 without downloading anything. It is not used for the reported results.

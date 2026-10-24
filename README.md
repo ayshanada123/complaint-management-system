@@ -36,8 +36,6 @@ data/raw/complaints.csv ─> scripts/prepare_data.py ─> data/complaints_clean.
 
 ## Dataset
 
-## Dataset
-
 The category model is trained on the **CFPB Consumer Complaint Database**
 (US government, public domain). The copy used here was downloaded from Kaggle:
 "Consumer Complaint Database" by Kaushik D (CC0: Public Domain), which republishes

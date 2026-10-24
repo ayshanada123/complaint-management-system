@@ -1,0 +1,83 @@
+{% extends "base_console.html" %}
+{% block title %}Console{% endblock %}
+{% block content %}
+<h1>Complaint queue</h1>
+<p style="color:var(--slate); margin-top:-8px;">AI-classified as they arrive, sorted by SLA due date.</p>
+
+<div class="stat-cards">
+  <div class="card">
+    <div class="num">{{ stats.total }}</div>
+    <div class="label">Total complaints</div>
+  </div>
+  <div class="card">
+    <div class="num" style="color:var(--urgent)">{{ stats.overdue }}</div>
+    <div class="label">Past SLA due date</div>
+  </div>
+  <div class="card">
+    <div class="num">{{ stats.by_status.get('New', 0) }}</div>
+    <div class="label">New / untriaged</div>
+  </div>
+  <div class="card">
+    <div class="num">{{ stats.by_priority.get('Urgent', 0) + stats.by_priority.get('High', 0) }}</div>
+    <div class="label">High + urgent</div>
+  </div>
+</div>
+
+<form class="filter-bar" method="GET">
+  <select name="status" onchange="this.form.submit()">
+    <option value="">All statuses</option>
+    {% for s in statuses %}
+    <option value="{{ s }}" {{ 'selected' if active_status == s }}>{{ s }}</option>
+    {% endfor %}
+  </select>
+  <select name="category" onchange="this.form.submit()">
+    <option value="">All categories</option>
+    {% for cat in categories %}
+    <option value="{{ cat }}" {{ 'selected' if active_category == cat }}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+  <select name="priority" onchange="this.form.submit()">
+    <option value="">All priorities</option>
+    {% for p in priorities %}
+    <option value="{{ p }}" {{ 'selected' if active_priority == p }}>{{ p }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if complaints %}
+<table class="complaints">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Customer</th>
+      <th>AI classification</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Assigned to</th>
+      <th>Due</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in complaints %}
+    <tr class="{{ 'overdue' if c.due_at < now and c.status not in ['Resolved','Closed'] else '' }}">
+      <td class="mono">#{{ '%04d' % c.id }}</td>
+      <td><a class="row-link" href="{{ url_for('complaint_detail', complaint_id=c.id) }}">{{ c.customer_name }}</a></td>
+      <td>
+        <span class="ai-badge {{ 'needs-review' if c.category_confidence < 0.35 else '' }}">
+          <span class="dot"></span>{{ c.category }} · {{ (c.category_confidence * 100) | round | int }}%
+        </span>
+      </td>
+      <td><span class="pill priority-{{ c.priority }}">{{ c.priority }}</span></td>
+      <td><span class="pill status">{{ c.status }}</span></td>
+      <td>{{ c.assigned_to }}</td>
+      <td class="mono">{{ c.due_at[5:16].replace('T', ' ') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card empty-state">
+  No complaints match these filters yet.
+</div>
+{% endif %}
+{% endblock %}

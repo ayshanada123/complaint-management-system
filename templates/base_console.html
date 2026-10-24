@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Console{% endblock %} · CRM Mini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="console-shell">
+  <aside class="sidebar">
+    <div class="brand">Complaint Ops<span>AI-ASSISTED CONSOLE</span></div>
+    <nav>
+      <a href="{{ url_for('console') }}" class="{{ 'active' if request.endpoint == 'console' else '' }}">Console</a>
+      <a href="{{ url_for('submit') }}" target="_blank" rel="noopener">Customer portal ↗</a>
+    </nav>
+    <form method="POST" action="{{ url_for('logout') }}" class="logout-form">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <button type="submit" class="btn secondary">Log out</button>
+    </form>
+    <div class="model-note">
+      Model: {{ model.source }}
+      {% if model.macro_f1 is defined %}<br>Macro-F1 {{ model.macro_f1 }} · {{ model.selected_model }}{% endif %}
+    </div>
+  </aside>
+  <main class="console-main">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

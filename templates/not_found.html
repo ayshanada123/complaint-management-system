@@ -1,0 +1,7 @@
+{% extends "base_public.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<div class="eyebrow">Support</div>
+<h1>We can't find that ticket</h1>
+<p class="lede">Double check the link, or <a href="{{ url_for('submit') }}">submit a new complaint</a>.</p>
+{% endblock %}

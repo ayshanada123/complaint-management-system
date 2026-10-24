@@ -1,0 +1,150 @@
+{
+  "data_file": "C:\\Users\\AYSHA NADA\\Downloads\\crm-mini-v2 (1)\\crm-miniG\\data\\complaints_clean.csv",
+  "n_total": 28000,
+  "n_train": 22400,
+  "n_test": 5600,
+  "classes": [
+    "Bank Accounts & Services",
+    "Credit & Prepaid Cards",
+    "Credit Reporting",
+    "Debt Collection",
+    "Loans",
+    "Money Transfers",
+    "Mortgage"
+  ],
+  "compared_models": {
+    "Logistic Regression": {
+      "accuracy": 0.822,
+      "macro_f1": 0.8222
+    },
+    "Naive Bayes": {
+      "accuracy": 0.7993,
+      "macro_f1": 0.7992
+    }
+  },
+  "selected_model": "Logistic Regression",
+  "accuracy": 0.822,
+  "macro_f1": 0.8222,
+  "per_class": {
+    "Bank Accounts & Services": {
+      "precision": 0.7805755395683454,
+      "recall": 0.81375,
+      "f1-score": 0.7968176254589964,
+      "support": 800.0
+    },
+    "Credit & Prepaid Cards": {
+      "precision": 0.80625,
+      "recall": 0.80625,
+      "f1-score": 0.80625,
+      "support": 800.0
+    },
+    "Credit Reporting": {
+      "precision": 0.7698795180722892,
+      "recall": 0.79875,
+      "f1-score": 0.7840490797546013,
+      "support": 800.0
+    },
+    "Debt Collection": {
+      "precision": 0.7864450127877238,
+      "recall": 0.76875,
+      "f1-score": 0.7774968394437421,
+      "support": 800.0
+    },
+    "Loans": {
+      "precision": 0.8371501272264631,
+      "recall": 0.8225,
+      "f1-score": 0.8297604035308953,
+      "support": 800.0
+    },
+    "Money Transfers": {
+      "precision": 0.8399487836107554,
+      "recall": 0.82,
+      "f1-score": 0.8298545224541429,
+      "support": 800.0
+    },
+    "Mortgage": {
+      "precision": 0.9390088945362135,
+      "recall": 0.92375,
+      "f1-score": 0.931316950220542,
+      "support": 800.0
+    },
+    "accuracy": 0.8219642857142857,
+    "macro avg": {
+      "precision": 0.8227511251145414,
+      "recall": 0.8219642857142857,
+      "f1-score": 0.8222207744089886,
+      "support": 5600.0
+    },
+    "weighted avg": {
+      "precision": 0.8227511251145415,
+      "recall": 0.8219642857142857,
+      "f1-score": 0.8222207744089884,
+      "support": 5600.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      651,
+      49,
+      9,
+      4,
+      9,
+      71,
+      7
+    ],
+    [
+      47,
+      645,
+      40,
+      22,
+      15,
+      29,
+      2
+    ],
+    [
+      9,
+      29,
+      639,
+      78,
+      32,
+      2,
+      11
+    ],
+    [
+      6,
+      28,
+      86,
+      615,
+      42,
+      8,
+      15
+    ],
+    [
+      12,
+      16,
+      45,
+      49,
+      658,
+      10,
+      10
+    ],
+    [
+      101,
+      24,
+      1,
+      8,
+      7,
+      656,
+      3
+    ],
+    [
+      8,
+      9,
+      10,
+      6,
+      23,
+      5,
+      739
+    ]
+  ]
+}

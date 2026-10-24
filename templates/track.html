@@ -1,0 +1,24 @@
+{% extends "base_public.html" %}
+{% block title %}Track complaint #{{ c.id }}{% endblock %}
+{% block content %}
+<div class="eyebrow">Ticket #{{ '%04d' % c.id }}</div>
+<h1>Thanks, {{ c.customer_name.split(' ')[0] }} — we've got it</h1>
+<p class="lede">Keep your ticket number <strong>#{{ c.id }}</strong> and bookmark this page to check the status of your complaint anytime.</p>
+
+<div class="card">
+  <div class="meta-row">
+    <div class="item"><div class="k">Category</div><div class="v">{{ c.category }}</div></div>
+    <div class="item"><div class="k">Priority</div><div class="v"><span class="pill priority-{{ c.priority }}">{{ c.priority }}</span></div></div>
+    <div class="item"><div class="k">Assigned to</div><div class="v">{{ c.assigned_to }}</div></div>
+    <div class="item"><div class="k">Target response by</div><div class="v mono">{{ c.due_at[:16].replace('T', ' ') }}</div></div>
+  </div>
+
+  <div class="timeline">
+    <div class="step {{ 'done' if c.status in ['New','In Progress','Resolved','Closed'] else '' }}">Received</div>
+    <div class="step {{ 'done' if c.status in ['In Progress','Resolved','Closed'] else '' }}">In progress</div>
+    <div class="step {{ 'done' if c.status in ['Resolved','Closed'] else '' }}">Resolved</div>
+  </div>
+
+  <p style="color:var(--slate); font-size:13px;">Your message: “{{ c.description }}”</p>
+</div>
+{% endblock %}

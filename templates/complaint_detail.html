@@ -1,0 +1,53 @@
+{% extends "base_console.html" %}
+{% block title %}#{{ '%04d' % c.id }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('console') }}" style="font-size:13px; color:var(--slate); text-decoration:none;">← Back to queue</a>
+<h1 style="margin-top:10px;">{{ c.customer_name }} <span class="mono" style="color:var(--slate); font-size:16px;">#{{ '%04d' % c.id }}</span></h1>
+
+<div class="meta-row">
+  <div class="item"><div class="k">Email</div><div class="v">{{ c.customer_email }}</div></div>
+  <div class="item"><div class="k">Submitted</div><div class="v mono">{{ c.created_at[:16].replace('T',' ') }}</div></div>
+  <div class="item"><div class="k">Due</div><div class="v mono">{{ c.due_at[:16].replace('T',' ') }}</div></div>
+  <div class="item"><div class="k">Assigned to</div><div class="v">{{ c.assigned_to }}</div></div>
+</div>
+
+<div class="card" style="margin-bottom:18px;">
+  <div class="ai-badge {{ 'needs-review' if c.category_confidence < 0.35 else '' }}" style="margin-bottom:10px;">
+    <span class="dot"></span>AI classification · {{ (c.category_confidence * 100) | round | int }}% confidence
+  </div>
+  <div class="meta-row" style="margin:0;">
+    <div class="item"><div class="k">Category</div><div class="v">{{ c.category }}</div></div>
+    <div class="item"><div class="k">Detected sentiment</div><div class="v">{{ c.sentiment }}</div></div>
+    <div class="item"><div class="k">Suggested priority</div><div class="v"><span class="pill priority-{{ c.priority }}">{{ c.priority }}</span></div></div>
+  </div>
+  <p style="margin:16px 0 0; font-size:14px;">“{{ c.description }}”</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-bottom:14px;">Update this complaint</h3>
+  <form method="POST" action="{{ url_for('update_complaint', complaint_id=c.id) }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        {% for s in statuses %}
+        <option value="{{ s }}" {{ 'selected' if c.status == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="priority">Priority (override AI if needed)</label>
+      <select id="priority" name="priority">
+        {% for p in priorities %}
+        <option value="{{ p }}" {{ 'selected' if c.priority == p }}>{{ p }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="resolution_notes">Resolution notes</label>
+      <textarea id="resolution_notes" name="resolution_notes" placeholder="What was done to resolve this?">{{ c.resolution_notes or '' }}</textarea>
+    </div>
+    <button type="submit" class="btn">Save changes</button>
+  </form>
+</div>
+{% endblock %}

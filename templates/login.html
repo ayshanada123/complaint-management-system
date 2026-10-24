@@ -1,0 +1,23 @@
+{% extends "base_public.html" %}
+{% block title %}Staff login{% endblock %}
+{% block content %}
+<div class="eyebrow">Staff</div>
+<h1>Sign in to the console</h1>
+<p class="lede">This area is for support staff only.</p>
+
+<div class="card">
+  {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+  <form method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required autocomplete="username">
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="btn">Sign in</button>
+  </form>
+</div>
+{% endblock %}

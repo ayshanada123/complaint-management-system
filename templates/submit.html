@@ -1,0 +1,72 @@
+{% extends "base_public.html" %}
+{% block title %}Report an issue{% endblock %}
+{% block content %}
+<div class="eyebrow">Support</div>
+<h1>Tell us what went wrong</h1>
+<p class="lede">Describe the issue in your own words — our system reads it, tags a category and priority, and routes it to the right team automatically.</p>
+
+<div class="card">
+  {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+  <form method="POST" action="{{ url_for('submit') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field">
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" required minlength="2" maxlength="100" value="{{ form.name }}">
+    </div>
+    <div class="field">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" required maxlength="254" value="{{ form.email }}">
+    </div>
+    <div class="field">
+      <label for="description">What happened?</label>
+      <textarea id="description" name="description" required minlength="15" maxlength="5000"
+        placeholder="e.g. A debt collector keeps calling me about a debt I already paid.">{{ form.description }}</textarea>
+      <div class="ai-preview" id="aiPreview">
+        <span class="ai-badge"><span class="dot"></span>AI reading your message…</span>
+        <div class="row" id="aiPreviewBody"></div>
+      </div>
+    </div>
+    <button type="submit" class="btn">Submit complaint</button>
+  </form>
+</div>
+
+<script>
+const textarea = document.getElementById('description');
+const preview = document.getElementById('aiPreview');
+const previewBody = document.getElementById('aiPreviewBody');
+let debounce;
+
+textarea.addEventListener('input', () => {
+  clearTimeout(debounce);
+  debounce = setTimeout(async () => {
+    const description = textarea.value;
+    if (description.trim().length < 12) {
+      preview.classList.remove('visible');
+      return;
+    }
+    try {
+      const res = await fetch('/api/classify-preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description })
+      });
+      const data = await res.json();
+      if (!data.ready) { preview.classList.remove('visible'); return; }
+
+      const reviewNote = data.needs_review
+        ? '<span class="ai-badge needs-review">Low confidence — a person will confirm this</span>'
+        : '';
+      previewBody.innerHTML = `
+        <span class="pill priority-${data.priority}">${data.priority} priority</span>
+        <span class="pill status">${data.category}</span>
+        <span class="pill status">${data.sentiment} tone</span>
+        ${reviewNote}
+      `;
+      preview.classList.add('visible');
+    } catch (e) {
+      preview.classList.remove('visible');
+    }
+  }, 500);
+});
+</script>
+{% endblock %}

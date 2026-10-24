@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+crm.db
+.DS_Store
+
+# Large / generated data
+data/raw/*
+!data/raw/.gitkeep
+data/complaints_clean.csv
+
+# Trained model binary (re-create with: python train.py)
+models/*.joblib
